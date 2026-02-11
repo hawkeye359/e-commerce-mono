@@ -1,6 +1,7 @@
 import { createProductService } from '@/services/admin/catalogue/create-product.service';
 import { HOST } from '@/utils/api-client';
 import { useForm } from '@tanstack/react-form';
+import { useQueryClient } from '@tanstack/react-query';
 import { nanoid } from 'nanoid';
 import { useEffect } from 'react';
 import { toast } from 'sonner';
@@ -38,6 +39,7 @@ const checkForUrlErrorInImages = (images: ImageState[]) => {
 export const useCreateProduct = () => {
   const { images, replaceImageState, addImages, deleteImage, reset } =
     useImageStore();
+  const queryClient = useQueryClient();
 
   const form = useForm({
     defaultValues: {
@@ -64,6 +66,12 @@ export const useCreateProduct = () => {
       if (!response.success) {
         toast(response.error.detail);
       }
+      queryClient.invalidateQueries({
+        queryKey: ['admin', 'product', 'list'],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ['product', 'list'],
+      });
     },
   });
 

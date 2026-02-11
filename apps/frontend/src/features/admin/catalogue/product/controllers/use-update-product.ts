@@ -2,7 +2,7 @@ import { getProductDetailsService } from '@/services/admin/catalogue/get-product
 import { updateProductService } from '@/services/admin/catalogue/update-prodct.service';
 import { HOST } from '@/utils/api-client';
 import { useForm } from '@tanstack/react-form';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { nanoid } from 'nanoid';
 import { useEffect } from 'react';
 import { toast } from 'sonner';
@@ -60,6 +60,8 @@ export const useUpdateProduct = (id: string) => {
   const { images, replaceImageState, addImages, deleteImage, reset } =
     useImageStore();
 
+  const queryClient = useQueryClient();
+
   const {
     data,
     isError,
@@ -81,11 +83,10 @@ export const useUpdateProduct = (id: string) => {
       console.log(form.state.values);
       const images = await createFilesFromUrls(result.data.data.images);
       addImages(images);
+
       return result.data.data;
     },
   });
-
-  console.log(isError, error);
 
   const form = useForm({
     defaultValues: {
@@ -112,6 +113,12 @@ export const useUpdateProduct = (id: string) => {
       if (!response.success) {
         toast(response.error.detail);
       }
+      queryClient.invalidateQueries({
+        queryKey: ['admin', 'product', 'list'],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ['product', 'list'],
+      });
     },
   });
 
