@@ -1,4 +1,5 @@
 import { CreateProductUseCase } from "@/applicaiton/admin/product/create-product.usecase";
+import { DeleteProductUseCase } from "@/applicaiton/admin/product/delete-product.usecase";
 import { GetProductListUsecase } from "@/applicaiton/admin/product/get-product-list.usecase";
 import { GetProductDetailsUsecase } from "@/applicaiton/admin/product/get-produuct-details";
 import { UpdateProductProductUseCase } from "@/applicaiton/admin/product/update-product.usecase";
@@ -44,6 +45,16 @@ productController.put("/:id", async (req, res, next) => {
   try {
     const useCase = new UpdateProductProductUseCase(repo);
     const response = await useCase.handle(req.params.id, req.body);
+    res.json({ success: true, data: response });
+  } catch (e) {
+    next(e);
+  }
+});
+
+productController.delete("/:id", async (req, res, next) => {
+  try {
+    const useCase = new DeleteProductUseCase(repo);
+    const response = await useCase.handle(req.params.id);
     res.json({ success: true, data: response });
   } catch (e) {
     next(e);
