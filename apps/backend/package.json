@@ -1,0 +1,40 @@
+{
+  "name": "full-stack-backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "loadenv": "dotenvx run -f .env",
+    "dev": "pnpm run loadenv -- nodemon",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prisma:generate": "pnpm run loadenv -- prisma generate",
+    "prisma:push": "pnpm run loadenv -- prisma db push",
+    "prisma:migrate": "pnpm run loadenv -- prisma db migrate"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.15.1",
+  "dependencies": {
+    "@dotenvx/dotenvx": "^1.52.0",
+    "@prisma/client": "~6.19.2",
+    "@t3-oss/env-core": "^0.13.10",
+    "@types/body-parser": "^1.19.6",
+    "@types/morgan": "^1.9.10",
+    "body-parser": "^2.2.2",
+    "cors": "^2.8.6",
+    "express": "^5.2.1",
+    "morgan": "^1.10.1",
+    "uploadthing": "^7.7.4",
+    "zod": "^4.3.6"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.6",
+    "@types/node": "^25.2.2",
+    "nodemon": "^3.1.11",
+    "prisma": "~6.19.2",
+    "tsx": "^4.21.0"
+  }
+}
