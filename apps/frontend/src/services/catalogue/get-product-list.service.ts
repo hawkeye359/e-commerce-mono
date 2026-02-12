@@ -11,10 +11,6 @@ type ProductListServerResponse = {
 
 export async function getProductListService() {
   const servicePath = '/catalogue/product';
-  // return await apiClientMock.get<ProductListServerResponse[], ServiceProblems>(
-  //   servicePath,
-  //   data,
-  // )
   return await apiClient.get<ProductListServerResponse[], ProblemDetails>(
     servicePath,
   );

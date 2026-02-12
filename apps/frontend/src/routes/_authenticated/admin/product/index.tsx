@@ -2,7 +2,7 @@ import ProductListScreen from '@/features/admin/catalogue/product/screens/produc
 import { createFileRoute } from '@tanstack/react-router';
 
 export const Route = createFileRoute(
-  '/_authenticated/admin/catalogue/product/',
+  '/_authenticated/admin/product/',
 )({
   component: RouteComponent,
 });

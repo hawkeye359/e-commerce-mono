@@ -1,15 +1,22 @@
-import { TanStackDevtools } from '@tanstack/react-devtools'
-import { Outlet, createRootRoute } from '@tanstack/react-router'
-import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
+import { TanStackDevtools } from '@tanstack/react-devtools';
+import { createRootRoute, Outlet } from '@tanstack/react-router';
+import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools';
 
-import { Toaster } from '@/components/ui/sonner'
-import { queryClient } from '@/utils/query-client'
-import { QueryClientProvider } from '@tanstack/react-query'
+import { Header } from '@/components/ui/header';
+import { Toaster } from '@/components/ui/sonner';
+import { queryClient } from '@/utils/query-client';
+import { QueryClientProvider } from '@tanstack/react-query';
 
 export const Route = createRootRoute({
   component: () => (
     <QueryClientProvider client={queryClient}>
-      <Outlet />
+      <div className="h-svh w-svw">
+        <Header />
+        <main className="h-full w-full overflow-y-auto pt-20">
+          <Outlet />
+        </main>
+      </div>
+
       <Toaster richColors position="top-center" />
       <TanStackDevtools
         config={{
@@ -24,4 +31,4 @@ export const Route = createRootRoute({
       />
     </QueryClientProvider>
   ),
-})
+});

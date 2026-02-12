@@ -1,18 +1,13 @@
 import { getProductListService } from '@/services/admin/catalogue/get-product-list.service';
-import { useQuery } from '@tanstack/react-query';
+import type { AdminProductListView } from '@/types/admin/catalogue/product';
 
-type ProductListView = {
-  id: string;
-  title: string;
-  description: string;
-  rating: number;
-  images: string[];
-  price: number;
-};
+import { useQuery } from '@tanstack/react-query';
 
 export const useAdminProductList = () => {
   const { isLoading, data, isError, error } = useQuery({
-    queryFn: async function productListQueryFn(): Promise<ProductListView[]> {
+    queryFn: async function productListQueryFn(): Promise<
+      AdminProductListView[]
+    > {
       const result = await getProductListService();
       if (!result.success) {
         throw result.error;

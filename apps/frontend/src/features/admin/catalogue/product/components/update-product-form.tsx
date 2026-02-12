@@ -10,7 +10,14 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { useUpdateProduct } from '../controllers/use-update-product';
 
-export const UpdateProductScreen = ({ id }: { id: string }) => {
+export const UpdateProductForm = ({
+  id,
+  onSuccess,
+}: {
+  id: string;
+  onSuccess: () => void;
+  onClickCancel?: () => void;
+}) => {
   const {
     isFetchingProductDetails,
     images,
@@ -19,7 +26,7 @@ export const UpdateProductScreen = ({ id }: { id: string }) => {
     retryUpload,
     deleteImage,
     form,
-  } = useUpdateProduct(id);
+  } = useUpdateProduct(id, onSuccess);
 
   if (isFetchingProductDetails) {
     return (
@@ -30,8 +37,8 @@ export const UpdateProductScreen = ({ id }: { id: string }) => {
   }
 
   return (
-    <div className="flex justify-center items-center min-h-svh">
-      <div className="w-full max-w-md my-20">
+    <div className="">
+      <div className="w-full max-w-md">
         <form
           id="update-product-form"
           onSubmit={(e) => {

@@ -36,7 +36,7 @@ const checkForUrlErrorInImages = (images: ImageState[]) => {
   return false;
 };
 
-export const useCreateProduct = () => {
+export const useCreateProduct = (onSuccess?: () => void) => {
   const { images, replaceImageState, addImages, deleteImage, reset } =
     useImageStore();
   const queryClient = useQueryClient();
@@ -66,6 +66,12 @@ export const useCreateProduct = () => {
       if (!response.success) {
         toast(response.error.detail);
       }
+      toast.success('Product created successfully');
+
+      try {
+        onSuccess && onSuccess();
+      } catch (e) {}
+
       queryClient.invalidateQueries({
         queryKey: ['admin', 'product', 'list'],
       });

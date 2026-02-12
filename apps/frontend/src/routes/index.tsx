@@ -1,7 +1,12 @@
-import { createFileRoute, Link } from '@tanstack/react-router';
+import { createFileRoute, Link, redirect } from '@tanstack/react-router';
 
 export const Route = createFileRoute('/')({
   component: App,
+  beforeLoad: () => {
+    throw redirect({
+      to: '/products',
+    });
+  },
 });
 
 function App() {

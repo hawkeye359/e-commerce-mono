@@ -1,14 +1,14 @@
-import { getProductDetailsService } from '@/services/admin/catalogue/get-product-details.service';
 import { updateProductService } from '@/services/admin/catalogue/update-prodct.service';
 import { HOST } from '@/utils/api-client';
 import { useForm } from '@tanstack/react-form';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQueryClient } from '@tanstack/react-query';
 import { nanoid } from 'nanoid';
 import { useEffect } from 'react';
 import { toast } from 'sonner';
 import { genUploader } from 'uploadthing/client';
 import * as z from 'zod';
 import { useImageStore, type ImageState } from './use-image-upload-store';
+import { useProductDetails } from './use-product-details';
 
 export const { uploadFiles } = genUploader({
   url: `${HOST}/uploadthing`,
@@ -56,7 +56,7 @@ async function createFilesFromUrls(urls: string[]): Promise<ImageState[]> {
   return Promise.all(allPromises);
 }
 
-export const useUpdateProduct = (id: string) => {
+export const useUpdateProduct = (id: string, onSuccess?: () => void) => {
   const { images, replaceImageState, addImages, deleteImage, reset } =
     useImageStore();
 
@@ -64,28 +64,19 @@ export const useUpdateProduct = (id: string) => {
 
   const {
     data,
-    isError,
-    error,
-    isLoading: isFetchingProductDetails,
-  } = useQuery({
-    queryKey: ['product', 'details', id],
-    queryFn: async () => {
-      const result = await getProductDetailsService(id);
-      if (!result.success) {
-        throw result.error;
-      }
-      form.reset({
-        title: result.data.data.title,
-        description: result.data.data.description,
-        price: result.data.data.price.toString(),
-      });
+    isErrorInFetchingProductDetails,
+    erorrInFetchingProductDetails,
+    isFetchingProductDetails,
+  } = useProductDetails(id, async (result) => {
+    form.reset({
+      title: result.title,
+      description: result.description,
+      price: result.price.toString(),
+    });
 
-      console.log(form.state.values);
-      const images = await createFilesFromUrls(result.data.data.images);
-      addImages(images);
-
-      return result.data.data;
-    },
+    console.log(form.state.values);
+    const images = await createFilesFromUrls(result.images);
+    addImages(images);
   });
 
   const form = useForm({
@@ -111,13 +102,20 @@ export const useUpdateProduct = (id: string) => {
         images: images.map((image) => image.url) as string[],
       });
       if (!response.success) {
-        toast(response.error.detail);
+        toast.error(response.error.detail);
       }
+      toast.success('Product updated successfully');
+      try {
+        onSuccess && onSuccess();
+      } catch (e) {}
       queryClient.invalidateQueries({
         queryKey: ['admin', 'product', 'list'],
       });
       queryClient.invalidateQueries({
         queryKey: ['product', 'list'],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ['product', 'details', id],
       });
     },
   });
@@ -191,6 +189,8 @@ export const useUpdateProduct = (id: string) => {
   };
 
   return {
+    isErrorInFetchingProductDetails,
+    erorrInFetchingProductDetails,
     isFetchingProductDetails,
     isLoading,
     images,

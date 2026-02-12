@@ -1,20 +1,14 @@
 import { getProductListService } from '@/services/catalogue/get-product-list.service';
+import type { ProductListingView } from '@/types/catalogue/product';
 import { useQuery } from '@tanstack/react-query';
 import { useCallback } from 'react';
-
-export interface ProductListView {
-  id: string;
-  rating: number;
-  images: string[];
-  title: string;
-  price: number;
-  description: string;
-}
 
 export const useProductListController = () => {
   const { data, isError, error, isLoading } = useQuery({
     queryKey: ['product', 'list'],
-    queryFn: async function productListQueryFn(): Promise<ProductListView[]> {
+    queryFn: async function productListQueryFn(): Promise<
+      ProductListingView[]
+    > {
       const result = await getProductListService();
 
       if (!result.success) {

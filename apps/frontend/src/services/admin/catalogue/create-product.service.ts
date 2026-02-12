@@ -33,10 +33,6 @@ type ServiceProblems = InvalidParamsProblemDetails;
 
 export async function createProductService(data: CreateProductServerPayload) {
   const servicePath = '/admin/catalogue/product';
-  // return await apiClientMock.get<ProductListServerResponse[], ServiceProblems>(
-  //   servicePath,
-  //   data,
-  // )
   return await apiClient.post<CreateProductServerResponse, ServiceProblems>(
     servicePath,
     data,

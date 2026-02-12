@@ -1,8 +1,8 @@
-import { UpdateProductScreen } from '@/features/admin/catalogue/product/screens/update-product';
+import { UpdateProductScreen } from '@/features/admin/catalogue/product/components/update-product-form';
 import { createFileRoute } from '@tanstack/react-router';
 
 export const Route = createFileRoute(
-  '/_authenticated/admin/catalogue/product/update/$productId/',
+  '/_authenticated/admin/product/update/$productId/',
 )({
   component: RouteComponent,
 });

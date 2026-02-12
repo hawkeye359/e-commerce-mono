@@ -1,16 +1,15 @@
 import { Button } from '@/components/ui/button';
-import {
-  Field,
-  FieldGroup,
-  FieldLabel,
-  FieldLegend,
-  FieldSet,
-} from '@/components/ui/field';
+import { Field, FieldGroup, FieldLabel, FieldSet } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { useCreateProduct } from '../controllers/use-create-product';
 
-export const CreateProductScreen = () => {
+interface IProps {
+  onSuccess?: () => void;
+  onClickCancel?: () => void;
+}
+
+export const CreateProductForm = ({ onClickCancel, onSuccess }: IProps) => {
   const {
     images,
     isLoading,
@@ -18,11 +17,11 @@ export const CreateProductScreen = () => {
     retryUpload,
     deleteImage,
     form,
-  } = useCreateProduct();
+  } = useCreateProduct(onSuccess);
 
   return (
-    <div className="flex justify-center items-center min-h-svh">
-      <div className="w-full max-w-md my-20">
+    <div className="">
+      <div className="max-w-md">
         <form
           id="create-product-form"
           onSubmit={(e) => {
@@ -32,7 +31,6 @@ export const CreateProductScreen = () => {
         >
           <FieldGroup>
             <FieldSet>
-              <FieldLegend>Create Product</FieldLegend>
               <FieldGroup>
                 <form.Field
                   name="title"
@@ -156,7 +154,6 @@ export const CreateProductScreen = () => {
               </FieldGroup>
             </FieldSet>
           </FieldGroup>
-
           <FieldGroup className="mt-4">
             <Field orientation="horizontal">
               <Button
