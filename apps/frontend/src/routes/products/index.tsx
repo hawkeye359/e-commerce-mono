@@ -7,8 +7,7 @@ export const Route = createFileRoute('/products/')({
 });
 
 function RouteComponent() {
-  const { isLoading, data, isError, error, addToCart } =
-    useProductListController();
+  const { isLoading, data, isError, error } = useProductListController();
   if (isLoading) {
     return <div>Loading...</div>;
   }
@@ -21,5 +20,5 @@ function RouteComponent() {
     );
   }
 
-  return <ProductListingScreen data={data} addToCart={addToCart} />;
+  return <ProductListingScreen data={data} />;
 }

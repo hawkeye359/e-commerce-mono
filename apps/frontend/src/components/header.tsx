@@ -1,5 +1,6 @@
 import { cn } from '@/lib/utils';
 import { Link } from '@tanstack/react-router';
+import { Cart } from './cart';
 
 export const Header = ({
   className,
@@ -17,7 +18,10 @@ export const Header = ({
         <h1 className="text-xl font-bold">ShopGood</h1>
       </Link>
 
-      <Link to="/admin/product">Admin Dashboard</Link>
+      <div className="flex gap-4">
+        <Cart />
+        <Link to="/admin/product">Admin Dashboard</Link>
+      </div>
     </header>
   );
 };

@@ -1,4 +1,6 @@
+import { useCart } from '@/components/cart';
 import { Button } from '@/components/ui/button';
+import { ButtonGroup } from '@/components/ui/button-group';
 import {
   Card,
   CardAction,
@@ -14,15 +16,15 @@ import {
   CarouselPrevious,
 } from '@/components/ui/carousel';
 import type { ProductListingView } from '@/types/catalogue/product';
-import { Heart } from 'lucide-react';
+import { Heart, Minus } from 'lucide-react';
 
 export default function ProductItem({
   product,
-  addToCart,
 }: {
   product: ProductListingView;
-  addToCart: (id: string) => void;
 }) {
+  const { items, addItem, removeItem } = useCart();
+  const ProductInCart = items.find((item) => item.id === product.id);
   return (
     <Card className="flex-1 justify-between" key={product.id}>
       <Carousel>
@@ -48,8 +50,39 @@ export default function ProductItem({
         </CardTitle>
         <CardDescription>{`${product.description.slice(0, 100)}...`}</CardDescription>
         <CardAction className="flex mt-2 items-end justify-between">
-          <Button onClick={() => addToCart(product.id)}>Add to Cart</Button>
-          <Button variant="outline" onClick={() => addToCart(product.id)}>
+          {ProductInCart ? (
+            <ButtonGroup>
+              <Button onClick={() => removeItem(product.id)}>
+                <Minus />
+              </Button>
+              <Button>
+                {items.find((item) => item.id === product.id)?.quantity}
+              </Button>
+              <Button
+                onClick={() =>
+                  addItem({
+                    ...product,
+                    name: product.title,
+                  })
+                }
+              >
+                Add
+              </Button>
+            </ButtonGroup>
+          ) : (
+            <Button
+              onClick={() =>
+                addItem({
+                  ...product,
+                  name: product.title,
+                })
+              }
+            >
+              Add to Cart
+            </Button>
+          )}
+
+          <Button variant="outline">
             <Heart fill="currentColor" className="w-4 h-4 text-red-500" />
           </Button>
         </CardAction>
